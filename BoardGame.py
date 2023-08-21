@@ -2,7 +2,7 @@ import pygame
 import json
 from Classes.Map import Map
 from Constants.Globals import SCREEN_HEIGHT, SCREEN_WIDTH
-from Constants.Map_arrays import mapTest_array
+from Constants.Map_arrays import mapTest_array, map_array
 from Classes.Player import Player
 
 #клавиши используемые в игре
@@ -21,8 +21,15 @@ pygame.init()
 # настраивает окно отображения
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
+# Создание поверхностей для двойного буфера
+buffer_surface = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
+display_surface = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
+
 # создание карты
 map = Map(mapTest_array)
+map.CreateMap()
+#map.downloadMap('Main')
+map.SaveMap('Test')
 
 # цикл игры
 running = True
@@ -44,11 +51,21 @@ while running:
     # Получает события нажатия клавиш
     pressed_keys = pygame.key.get_pressed()
 
-    # Заполняет фон 
-    screen.fill((0, 0, 0))
+    # Создаём поверхность, на которой рисуем карту или загружаем уже нарисованную
+    buffer_surface.fill((0, 0, 0))  # Очистка буферной поверхности
+    # buffer_surface = pygame.image.load("SaveMaps/Main.png")
 
-    # отрисовывает карту
-    map.draw(screen)
+    # отрисовывает карту на поверхности. Нужно для новых карт
+    map.draw(buffer_surface)
+
+    # Сохранение поверхности в файл. Для новых карт
+    pygame.image.save(buffer_surface, "SaveMaps/Test.png")
+
+    # Копирование буферной поверхности на отображаемую поверхность
+    display_surface.blit(buffer_surface, (0, 0))
+
+    # Отображение отображаемой поверхности на экране
+    screen.blit(display_surface, (0, 0))
 
     # Обновление экрана
     pygame.display.flip()
