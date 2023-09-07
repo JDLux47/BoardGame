@@ -110,9 +110,9 @@ class Map:
                 # Если 0 - то есть дверь
                 elif self.map_array[x][y] == 0:
                     if self.map_array[x][y - 1] == 1 and self.map_array[x][y + 1] == 1:
-                        mapRows.append(Door(y, x, "Door_Horizontal", 0))
+                        mapRows.append(Door(y, x, "Door_Horizontal", 1))
                     elif self.map_array[x - 1][y] == 1 and self.map_array[x + 1][y] == 1:
-                        mapRows.append(Door(y, x, "Door_Horizontal", 0))
+                        mapRows.append(Door(y, x, "Door_Vertical", 1))
 
             self.mapCols.append(mapRows)
 
